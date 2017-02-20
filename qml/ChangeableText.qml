@@ -5,6 +5,7 @@ Item {
     width: 50
     height: 60
     property alias text: txt.text
+    property alias font: txt.font
     signal clicked
     Text {
         id: txt

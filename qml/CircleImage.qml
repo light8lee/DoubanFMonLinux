@@ -1,32 +1,76 @@
 import QtQuick 2.0
-
 Item {
     id: root
-    width: 100
-    height: width
-    property alias addr: cvs.addr
+    property int radius: 100
+    property alias source: cvs.source
+    signal clicked
+    width: radius * 2
+    height: radius * 2
     Canvas {
         id: cvs
+        anchors.fill: parent
         width: parent.width
         height: parent.height
-        property string addr: ""
+        property string source: ""
+        property bool stop: false
         onPaint: {
             var ctx = getContext("2d")
-            ctx.beginPath()
-            var x0 = width / 2
-            var y0 = height / 2
-            console.log(addr)
-            var r = width / 2
-            ctx.moveTo(width, y0)
-            ctx.arc(x0, y0, r, 0, Math.PI*2, true)
-            ctx.closePath()
-            //ctx.fill()
-            ctx.clip()
-            ctx.drawImage(addr, 0, 0, width, height)
-            ctx.stroke()
+            var x0 = radius
+            var y0 = radius
+            if (stop) {
+                ctx.fillStyle = Qt.rgba(1, 1, 1, 0.95)
+                ctx.beginPath()
+                ctx.moveTo(width, y0)
+                ctx.arc(x0, y0, radius-4, 0, Math.PI*2, true)
+                ctx.closePath()
+                ctx.fill()
+
+                ctx.fillStyle = Qt.rgba(0.1, 0.9, 0.1, 0.9)
+                ctx.beginPath()
+                var diff = radius / 4
+                var point_x1 = radius - diff / 2
+                var point_x2 = radius + diff
+                var point_y1 = radius - diff * Math.sqrt(3) / 2
+                var point_y2 = radius + diff * Math.sqrt(3) / 2
+                ctx.moveTo(point_x1, point_y1)
+                ctx.lineTo(point_x2, radius)
+                ctx.lineTo(point_x1, point_y2)
+                ctx.lineTo(point_x1, point_y1)
+                ctx.closePath()
+                ctx.fill()
+            } else {
+                ctx.lineWidth = 6
+                ctx.strokeStyle = Qt.rgba(0.1, 0.9, 0.1, 0.6)
+                ctx.beginPath()
+                //console.log(source)
+                ctx.moveTo(width, y0)
+                ctx.arc(x0, y0, radius, 0, Math.PI*2, true)
+                ctx.closePath()
+                //ctx.fill()
+                ctx.clip()
+                ctx.drawImage(source, 0, 0, width, height)
+                ctx.stroke()
+
+            }
+
         }
         Component.onCompleted: {
-            loadImage(cvs.addr)
+            loadImage(cvs.source)
+        }
+    }
+    MouseArea {
+        anchors.fill: cvs
+        hoverEnabled: true
+        onEntered: {
+            //console.log("Enter")
+        }
+        onExited: {
+            //console.log("Exited")
+        }
+        onClicked: {
+            root.clicked()
+            cvs.stop = !cvs.stop
+            cvs.requestPaint()
         }
     }
 }
