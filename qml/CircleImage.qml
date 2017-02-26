@@ -4,6 +4,8 @@ Item {
     property int radius: 100
     property alias source: cvs.source
     signal clicked
+    signal start
+    signal stop
     width: radius * 2
     height: radius * 2
     Canvas {
@@ -18,14 +20,14 @@ Item {
             var x0 = radius
             var y0 = radius
             if (stop) {
-                ctx.fillStyle = Qt.rgba(1, 1, 1, 0.95)
+                ctx.fillStyle = Qt.rgba(0.9, 0.9, 0.9, 0.95)
                 ctx.beginPath()
                 ctx.moveTo(width, y0)
-                ctx.arc(x0, y0, radius-4, 0, Math.PI*2, true)
+                ctx.arc(x0, y0, radius, 0, Math.PI*2, true)
                 ctx.closePath()
                 ctx.fill()
 
-                ctx.fillStyle = Qt.rgba(0.1, 0.9, 0.1, 0.9)
+                ctx.fillStyle = "#7C7C7C"
                 ctx.beginPath()
                 var diff = radius / 4
                 var point_x1 = radius - diff / 2
@@ -39,8 +41,8 @@ Item {
                 ctx.closePath()
                 ctx.fill()
             } else {
-                ctx.lineWidth = 6
-                ctx.strokeStyle = Qt.rgba(0.1, 0.9, 0.1, 0.6)
+                ctx.lineWidth = 4
+                ctx.strokeStyle = "#FFFFFF"
                 ctx.beginPath()
                 //console.log(source)
                 ctx.moveTo(width, y0)
@@ -56,21 +58,25 @@ Item {
         }
         Component.onCompleted: {
             loadImage(cvs.source)
+            root.clicked.connect(drawit)
         }
     }
     MouseArea {
         anchors.fill: cvs
         hoverEnabled: true
-        onEntered: {
-            //console.log("Enter")
-        }
-        onExited: {
-            //console.log("Exited")
-        }
         onClicked: {
             root.clicked()
-            cvs.stop = !cvs.stop
-            cvs.requestPaint()
         }
+    }
+    function drawit() {
+            cvs.stop = !cvs.stop
+            if (cvs.stop) {
+                root.stop()
+            } else {
+                root.start()
+            }
+
+            cvs.requestPaint()
+            //root.clicked()
     }
 }

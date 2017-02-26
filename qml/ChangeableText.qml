@@ -15,12 +15,14 @@ Item {
        anchors.fill: parent
        hoverEnabled: true
        onEntered: {
-           console.log("Entered!")
-           txt.font.bold = true
+           //console.log("Entered!")
+           //txt.font.bold = true
+           txt.font.underline = true
        }
        onExited: {
-           console.log("Exited!")
-           txt.font.bold = false
+           //console.log("Exited!")
+           //txt.font.bold = false
+           txt.font.underline = false
        }
        onClicked: {
            root.clicked()

@@ -4,12 +4,12 @@ import QtMultimedia 5.6
 Item {
     id: root
     width: 880
-    height: 6
+    height: 8
     signal clicked
-    property double completion_degree: 0
+    property real completion_degree: 0
 
     Rectangle {
-        id: progressBar
+        id: progress_bar
 
         anchors.left: parent.left
         anchors.right: parent.right

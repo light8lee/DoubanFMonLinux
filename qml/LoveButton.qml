@@ -5,12 +5,14 @@ Item {
     id: root
     width: 50
     height: 50
-    signal next
-
+    //property alias loved: cvs.loved
+    signal love
+    signal unlove
     Canvas {
         id: cvs
         width: root.width
         height: root.height
+        property bool loved: false
         antialiasing: true
 
         onPaint: {
@@ -28,25 +30,23 @@ Item {
             ctx.rotate(cvs.rotate);
             ctx.translate(-originX, -originY)
 
-            ctx.strokeStyle = Qt.rgba(.3, .3, .3,1);
             ctx.lineWidth = 1;
 
-            for (var i = 0; i < Tiger.Next.length; i++) {
-                if (Tiger.Next[i].width != undefined)
-                    ctx.lineWidth = Tiger.Next[i].width;
+            for (var i = 0; i < Tiger.Love.length; i++) {
+                if (Tiger.Love[i].width != undefined)
+                    ctx.lineWidth = Tiger.Love[i].width;
 
-                if (Tiger.Next[i].path != undefined)
-                    ctx.path = Tiger.Next[i].path;
+                if (Tiger.Love[i].path != undefined)
+                    ctx.path = Tiger.Love[i].path;
 
-                if (Tiger.Next[i].fill != undefined) {
-                    ctx.fillStyle = Tiger.Next[i].fill;
+                if (loved) {
+                    ctx.fillStyle = "#FF2C56";
+                    ctx.fill();
+                } else {
+                    ctx.fillStyle = "#080808"
                     ctx.fill();
                 }
 
-                if (Tiger.Next[i].stroke != undefined) {
-                    ctx.strokeStyle = Tiger.Next[i].stroke;
-                    ctx.stroke();
-                }
             }
             ctx.restore();
         }
@@ -54,7 +54,12 @@ Item {
     MouseArea {
         anchors.fill: cvs
         onClicked: {
-            root.next()
+            cvs.loved = !cvs.loved
+            cvs.requestPaint()
+            if (cvs.loved)
+                root.love()
+            else
+                root.unlove()
         }
     }
 

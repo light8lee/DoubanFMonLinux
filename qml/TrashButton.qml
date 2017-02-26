@@ -5,7 +5,7 @@ Item {
     id: root
     width: 50
     height: 50
-    signal next
+    signal throwed
 
     Canvas {
         id: cvs
@@ -31,20 +31,20 @@ Item {
             ctx.strokeStyle = Qt.rgba(.3, .3, .3,1);
             ctx.lineWidth = 1;
 
-            for (var i = 0; i < Tiger.Next.length; i++) {
-                if (Tiger.Next[i].width != undefined)
-                    ctx.lineWidth = Tiger.Next[i].width;
+            for (var i = 0; i < Tiger.Trash.length; i++) {
+                if (Tiger.Trash[i].width != undefined)
+                    ctx.lineWidth = Tiger.Trash[i].width;
 
-                if (Tiger.Next[i].path != undefined)
-                    ctx.path = Tiger.Next[i].path;
+                if (Tiger.Trash[i].path != undefined)
+                    ctx.path = Tiger.Trash[i].path;
 
-                if (Tiger.Next[i].fill != undefined) {
-                    ctx.fillStyle = Tiger.Next[i].fill;
+                if (Tiger.Trash[i].fill != undefined) {
+                    ctx.fillStyle = Tiger.Trash[i].fill;
                     ctx.fill();
                 }
 
-                if (Tiger.Next[i].stroke != undefined) {
-                    ctx.strokeStyle = Tiger.Next[i].stroke;
+                if (Tiger.Trash[i].stroke != undefined) {
+                    ctx.strokeStyle = Tiger.Trash[i].stroke;
                     ctx.stroke();
                 }
             }
@@ -54,7 +54,7 @@ Item {
     MouseArea {
         anchors.fill: cvs
         onClicked: {
-            root.next()
+            root.throwed()
         }
     }
 
