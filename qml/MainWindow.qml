@@ -5,6 +5,7 @@ Rectangle {
     id: root
     width: 1020
     height: 620
+    property alias sid: singer.text
 
     RowLayout {
         id: row
@@ -35,7 +36,7 @@ Rectangle {
             ChangeableText {
                 id: singer
                 height: 30
-                text: "unknown"
+                text: 'Unkown'
                 font.pixelSize: 15
                 y: bar.y - height - 10
             }
