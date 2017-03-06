@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
-Rectangle {
+Item {
     id: root
     width: 1020
     height: 620
@@ -78,9 +78,8 @@ Rectangle {
                     console.log("next clicked")
                 }
             }
-
-            //color: "#007F39"
         }
+
         Rectangle {
             id: right
             width: 240
@@ -100,7 +99,6 @@ Rectangle {
                     console.log("stop")
                 }
             }
-            //color: "#7F0900"
         }
     }
     focus: true
@@ -108,10 +106,4 @@ Rectangle {
         Keys.onSpacePressed.connect(intrfce.clicked)
     }
 
-    /*
-    Keys.onSpacePressed: {
-        intrfce.drawit()
-        //console.log("space pressed")
-    }
-    */
 }

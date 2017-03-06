@@ -6,6 +6,7 @@ Item {
     id: root
     width: 480
     height: 340
+    signal clicked
     property alias uname: uid.text
     property alias password: passwd.text
     Rectangle {
