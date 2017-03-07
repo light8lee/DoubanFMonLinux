@@ -6,6 +6,12 @@ Item {
     width: 1020
     height: 620
     property alias sid: singer.text
+    property alias picture: intrfce.source
+    property alias completion_degree: bar.completion_degree
+    signal love
+    signal unlove
+    signal throwed
+    signal next
 
     RowLayout {
         id: row
@@ -55,9 +61,11 @@ Item {
                 x: 0
                 onLove: {
                     console.log("love clicked")
+                    root.love()
                 }
                 onUnlove: {
                     console.log("unlove clicked")
+                    root.unlove()
                 }
             }
 
@@ -67,6 +75,7 @@ Item {
                 x: 60
                 onThrowed: {
                     console.log("thrash clicked")
+                    root.throwed()
                 }
             }
 
@@ -76,6 +85,7 @@ Item {
                 x: bar.width - 40
                 onNext: {
                     console.log("next clicked")
+                    root.next()
                 }
             }
         }

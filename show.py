@@ -2,18 +2,30 @@ import sys
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView
+from DoubanFM import DoubanFM
+import Logger
 
 # Main Function
 if __name__ == '__main__':
     # Create main app
-    myApp = QApplication(sys.argv)
+    main_app = QApplication(sys.argv)
     # Create a label and set its properties
-    appLabel = QQuickView()
-    appLabel.setSource(QUrl(sys.argv[1]))
+    douban = DoubanFM()
+    logger = Logger.Logger()
+    view = QQuickView()
+    root_context = view.rootContext()
+    root_context.setContextProperty("douban", douban)
+    root_context.setContextProperty("logger", logger)
+    mainurl = "qml/main.qml"
+    view.setSource(QUrl(mainurl))
+    '''
+    root_object = view.rootObject()
+    root_object.setProperty("sid", "Love Story")
+    '''
 
     # Show the Label
-    appLabel.show()
+    view.show()
 
     # Execute the Application and Exit
-    myApp.exec_()
+    main_app.exec_()
     sys.exit()

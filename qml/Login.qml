@@ -23,6 +23,27 @@ Item {
             anchors.centerIn: parent
         }
     }
+
+    Rectangle {
+        id: tip
+        height: 20
+        width: root.width
+        anchors.topMargin: 20
+        anchors.top: r1.bottom
+        visible: false
+        Text {
+            text: "用户名或密码错误"
+            font.pixelSize: 18
+            anchors.top: parent.top
+            anchors.centerIn: parent
+            color: "red"
+        }
+    }
+
+    function show_tip() {
+        tip.visible = true
+    }
+
     Rectangle {
         id: r2
         width: 358
@@ -30,19 +51,31 @@ Item {
         border.color: "lightgray"
         border.width: 1
         anchors.topMargin: 40
-        anchors.top: r1.bottom
+        anchors.top: tip.bottom
         x: (root.width - width) / 2.0
         TextField {
             id: uid
             anchors.fill: parent
             clip: true
             focus: true
-            //color: "black"
             KeyNavigation.tab: passwd
             font.pixelSize: 14
             verticalAlignment: TextInput.AlignVCenter
             activeFocusOnPress: true
             placeholderText: "手机号 / 邮箱 / 用户名"
+            onCursorPositionChanged: {
+                uid_tip.visible = false
+                tip.visible = false
+            }
+        }
+        Text {
+            id: uid_tip
+            anchors.right: parent.right
+            width: 40
+            visible: false
+            text: "必填"
+            font.pixelSize: 16
+            color: "red"
         }
     }
     Rectangle {
@@ -60,11 +93,24 @@ Item {
             anchors.fill: parent
             echoMode: TextInput.Password
             KeyNavigation.backtab: uid
-            //KeyNavigation.tab: passwd
+            KeyNavigation.tab: btn
             verticalAlignment: TextInput.AlignVCenter
             activeFocusOnPress: true
             font.pixelSize: 14
             placeholderText: "密码"
+            onCursorPositionChanged: {
+                passwd_tip.visible = false
+                tip.visible = false
+            }
+        }
+        Text {
+            id: passwd_tip
+            anchors.right: parent.right
+            width: 40
+            visible: false
+            text: "必填"
+            font.pixelSize: 16
+            color: "red"
         }
     }
     Rectangle {
@@ -93,8 +139,20 @@ Item {
                 }
 
             }
+
             anchors.fill: parent
             onClicked: {
+                var status = false
+                if (uid.text == "") {
+                    uid_tip.visible = true
+                    status = true
+                }
+                if (passwd.text == "") {
+                    passwd_tip.visible = true
+                    status = true
+                }
+                if (status) return
+
                 root.clicked()
             }
         }
