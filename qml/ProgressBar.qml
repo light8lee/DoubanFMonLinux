@@ -6,6 +6,7 @@ Item {
     width: 880
     height: 8
     signal clicked
+    property alias mouseX: bar_area.mouseX
     property real completion_degree: 0
 
     Rectangle {
@@ -30,6 +31,7 @@ Item {
         }
 
         MouseArea {
+            id: bar_area
             anchors.fill: parent
             onClicked: {
                 root.clicked()

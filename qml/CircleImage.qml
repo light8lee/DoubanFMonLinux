@@ -52,10 +52,13 @@ Item {
                 ctx.clip()
                 ctx.drawImage(source, 0, 0, width, height)
                 ctx.stroke()
-
             }
 
         }
+        onImageLoaded: {
+            cvs.requestPaint()
+        }
+
         Component.onCompleted: {
             loadImage(cvs.source)
             root.clicked.connect(drawit)
@@ -65,11 +68,11 @@ Item {
         anchors.fill: cvs
         hoverEnabled: true
         onClicked: {
+            cvs.stop = !cvs.stop
             root.clicked()
         }
     }
     function drawit() {
-            cvs.stop = !cvs.stop
             if (cvs.stop) {
                 root.stop()
             } else {
@@ -78,5 +81,8 @@ Item {
 
             cvs.requestPaint()
             //root.clicked()
+    }
+    function refresh() {
+        cvs.loadImage(root.source)
     }
 }

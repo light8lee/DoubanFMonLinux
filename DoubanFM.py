@@ -31,9 +31,6 @@ class DoubanFM(QObject):
 
     @pyqtSlot(str, str, result=bool)
     def login(self, name, passwd):
-        print(name)
-        print(passwd)
-        return True
         headers = {
                     'Accept': 'application/json, text/javascript, */*; q=0.01',
                     'Accept-Encoding': 'gzip, deflate, br',
@@ -97,66 +94,79 @@ class DoubanFM(QObject):
                         'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
                     'X-Requested-With': 'XMLHttpRequest',
                 }
+        Logger.log("type is %s" % rtype)
+        if rtype != 'n':
+            query_str['sid'] = self.song['sid']
         playlist_url = 'https://douban.com/j/v2/playlist'
         r = self.rqst.get(playlist_url, headers=headers, params=query_str)
-        print(r.status_code)
+        Logger.log(r.status_code)
         if r.status_code != 200:
             return False
-        print(r)
+        Logger.log(r)
         json = r.json()
-        print(json)
+        Logger.log(json)
         if json['r'] != 0:
+            Logger.err(json['err'])
             return False
-        self.playlist = json
+        if 'song' in json:
+            self.song = json['song'][0]
         return True
 
-    @pyqtSlot()
+    @pyqtSlot(result=bool)
     def download_content(self):
         headers = {
-                    'Accept': 'text/javascript, text/html, application/xml, text/xml, */*',
-                    'Accept-Encoding': 'gzip, deflate, sdch, br',
-                    'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
-                    'Connection': 'keep-alive',
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Host': 'douban.fm',
-                    'Referer': 'https://douban.fm/',
-                    'User-Agent': \
-                        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                    'X-Requested-With': 'XMLHttpRequest',
+                   'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                   'accept-encoding': 'gzip, deflate, sdch, br',
+                   'accept-language': 'zh-CN,zh;q=0.8,en;q=0.6',
+                   'cache-control': 'max-age=0',
+                   'cookie': 'bid=ZD_5767jxic',
+                    'user-agent': \
+                            'Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
                 }
-        song = self.playlist['song'][0]
+        song = self.song
         pic_url = song['picture']
         r = self.rqst.get(pic_url, headers=headers, stream=True, timeout=10)
-        pic_name = "assert/" + pic_url.split('/')[-1]
+        pic_name = "picture/" + pic_url.split('/')[-1]
         if r.status_code != 200:
-            print(pic_url)
-            print('error get picture')
-            print(r.status_code)
-            self.pic_name = "assert/lf.jpg"
+            Logger.err(pic_url)
+            Logger.err('error get picture')
+            Logger.err(r.status_code)
+            return False
         else:
             with open(pic_name, 'wb') as target:
                 for chunk in r.iter_content(1024):
                     target.write(chunk)
-            self.pic_name = pic_name
 
         music_url = song['url']
         r = self.rqst.get(music_url, headers=headers, stream=True, timeout=20)
         music_name = "music/" + music_url.split('/')[-1]
         if r.status_code != 200:
-            print(music_url)
-            print('error get music')
-            print(r.status_code)
-            self.music_name = ""
+            Logger.err(music_url)
+            Logger.err('error get music')
+            Logger.err(r.status_code)
+            return False
         else:
             with open(music_name, 'wb') as target:
                 for chunk in r.iter_content(1024):
                     target.write(chunk)
-            self.music_name = music_name
+        return True
 
     @pyqtSlot(result=str)
     def get_pic_name(self):
-        return self.pic_name
+        res = self.song['picture'].split('/')[-1]
+        Logger.log("pic_name %s" % res)
+        return res
 
     @pyqtSlot(result=str)
     def get_music_name(self):
-        return self.music_name
+        res = self.song['url'].split('/')[-1]
+        Logger.log("music_name %s" % res)
+        return res
+
+    @pyqtSlot(result=str)
+    def get_artist(self):
+        return self.song['artist']
+
+    @pyqtSlot(result=str)
+    def get_title(self):
+        return self.song['title']

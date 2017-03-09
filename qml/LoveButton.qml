@@ -62,5 +62,8 @@ Item {
                 root.unlove()
         }
     }
-
+    function reset() {
+        cvs.loved = false
+        cvs.requestPaint()
+    }
 }

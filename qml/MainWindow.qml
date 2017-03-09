@@ -5,13 +5,20 @@ Item {
     id: root
     width: 1020
     height: 620
-    property alias sid: singer.text
+    property alias title: music.text
+    property alias artist: singer.text
+
+    property alias bar_width: bar.width
+    property alias mouseX: bar.mouseX
     property alias picture: intrfce.source
     property alias completion_degree: bar.completion_degree
     signal love
     signal unlove
     signal throwed
     signal next
+    signal start
+    signal pause
+    signal seek
 
     RowLayout {
         id: row
@@ -19,12 +26,12 @@ Item {
         anchors.margins: 8, 8, 8, 8
         spacing: 6
         Rectangle {
-            id: left
+            //id: left
             width: 280
             height: 240
             anchors.left: parent.left
             anchors.topMargin: (root.height - height) / 2
-            anchors.bottomMargin: anchors.topMargin
+            anchors.bottomMargin: (root.height - height) / 2
             color: "#3F3F3F"
         }
         Rectangle {
@@ -37,6 +44,9 @@ Item {
                 width: 450
                 height: 120
                 y: (middle.height-height) / 2
+                onClicked: {
+                    root.seek()
+                }
             }
 
             ChangeableText {
@@ -91,7 +101,7 @@ Item {
         }
 
         Rectangle {
-            id: right
+            //id: right
             width: 240
             height: 240
             CircleImage {
@@ -104,9 +114,11 @@ Item {
                 }
                 onStart: {
                     console.log("start")
+                    root.start()
                 }
                 onStop: {
                     console.log("stop")
+                    root.pause()
                 }
             }
         }
@@ -114,6 +126,10 @@ Item {
     focus: true
     Component.onCompleted: {
         Keys.onSpacePressed.connect(intrfce.clicked)
+    }
+    function reset() {
+        intrfce.refresh()
+        loveit.reset()
     }
 
 }
