@@ -1,4 +1,3 @@
-#!/bin/bash python3
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
 import urllib
@@ -8,6 +7,7 @@ import sys
 import getpass
 import http.cookiejar as cookielib
 import Logger
+import re
 
 from PyQt5.QtCore import QUrl
 from PyQt5.QtCore import QObject
@@ -170,3 +170,32 @@ class DoubanFM(QObject):
     @pyqtSlot(result=str)
     def get_title(self):
         return self.song['title']
+
+    @pyqtSlot(result=str)
+    def get_lyric(self):
+        headers = {
+                   'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                   'accept-encoding': 'gzip, deflate, sdch, br',
+                   'accept-language': 'zh-CN,zh;q=0.8,en;q=0.6',
+                   'cache-control': 'max-age=0',
+                   'cookie': 'bid=ZD_5767jxic',
+                    'user-agent': \
+                            'Mozilla/5.0 (X11; Fedora; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+                }
+        lyric_url = "https://douban.fm/j/v2/lyric"
+        song_info = {
+                'sid': self.song['sid'],
+                'ssid': self.song['ssid']
+                }
+        r = requests.get(lyric_url, headers=headers, timeout=30, params=song_info)
+        if r.status_code != 200:
+            Logger.err('error')
+            Logge.err(r.status_code)
+        res = r.json()
+        lyric = res['lyric']
+        lr = re.compile("\[\d{2}:\d{2}\.\d{2}\]")
+        content = lr.split(lyric)[1:]
+        time = lr.findall(lyric)
+        lyric_str = "".join(content)
+        return lyric_str
+

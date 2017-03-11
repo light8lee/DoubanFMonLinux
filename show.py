@@ -17,6 +17,7 @@ if __name__ == '__main__':
     root_context.setContextProperty("douban", douban)
     root_context.setContextProperty("logger", logger)
     mainurl = "qml/main.qml"
+    view.engine().quit.connect(main_app.quit)
     view.setSource(QUrl(mainurl))
     '''
     root_object = view.rootObject()

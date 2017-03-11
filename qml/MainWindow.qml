@@ -32,17 +32,21 @@ Item {
             anchors.left: parent.left
             anchors.topMargin: (root.height - height) / 2
             anchors.bottomMargin: (root.height - height) / 2
-            color: "#3F3F3F"
+            LyricPanel {
+                id: lyric_panel
+                anchors.fill: parent
+                width: parent.width
+                height: parent.height
+            }
         }
         Rectangle {
             id: middle
             width: 460
             height: 400
-
             ProgressBar {
                 id: bar
                 width: 450
-                height: 120
+                height: 10
                 y: (middle.height-height) / 2
                 onClicked: {
                     root.seek()
@@ -54,7 +58,7 @@ Item {
                 height: 30
                 text: 'Unkown'
                 font.pixelSize: 15
-                y: bar.y - height - 10
+                y: bar.y - height - 20
             }
 
             ChangeableText {
@@ -62,7 +66,7 @@ Item {
                 height: 40
                 text: "None"
                 font.pixelSize: 25
-                y: singer.y - height - 10
+                y: singer.y - height - 8
             }
 
             LoveButton {
@@ -98,6 +102,21 @@ Item {
                     root.next()
                 }
             }
+
+            LyricButton {
+                id: lyric_btn
+                y: bar.y - 28
+                x: bar.width - 80
+                property bool showing: false
+                onShow: {
+                    if (showing) return
+                    console.log("show lyric")
+                    var lyric_str = douban.get_lyric()
+                    var lyrics = lyric_str.split('\r\n')
+                    lyric_panel.content = lyrics
+                    showing = true
+                }
+            }
         }
 
         Rectangle {
@@ -130,6 +149,8 @@ Item {
     function reset() {
         intrfce.refresh()
         loveit.reset()
+        lyric_btn.showing = false
+        lyric_panel.content = []
     }
 
 }
