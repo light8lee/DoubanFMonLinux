@@ -19,15 +19,15 @@ Item {
                 res = douban.get_playlist('p')
             }
             if (!res) return
-            var download_status = douban.download_content()
-            if (download_status) {
-                main.picture = "../picture/" + douban.get_pic_name()
-                player.source = "../music/" + douban.get_music_name()
+            //var download_status = douban.download_content()
+            //if (download_status) {
+                main.picture = douban.get_pic_name()
+                player.source = douban.get_music_name()
                 main.reset()
                 main.title = douban.get_title()
                 main.artist = douban.get_artist()
                 player.play()
-            }
+            //}
         }
     }
 
@@ -60,28 +60,28 @@ Item {
         onNext: {
             var res = douban.get_playlist('s')
             if (!res) return
-            var download_status = douban.download_content()
-            if (download_status) {
-                main.picture = "../picture/" + douban.get_pic_name()
-                player.source = "../music/" + douban.get_music_name()
+            //var download_status = douban.download_content()
+            //if (download_status) {
+                main.picture = douban.get_pic_name()
+                player.source = douban.get_music_name()
                 main.reset()
                 main.title = douban.get_title()
                 main.artist = douban.get_artist()
                 player.play()
-            }
+            //}
         }
         onThrowed: {
             var res = douban.get_playlist('b')
             if (!res) return
-            var download_status = douban.download_content()
-            if (download_status) {
-                main.picture = "../picture/" + douban.get_pic_name()
-                player.source = "../music/" + douban.get_music_name()
+            //var download_status = douban.download_content()
+            //if (download_status) {
+                main.picture = douban.get_pic_name()
+                player.source = douban.get_music_name()
                 main.reset()
                 main.title = douban.get_title()
                 main.artist = douban.get_artist()
                 player.play()
-            }
+            //}
         }
         onStart: {
             player.play()
@@ -92,6 +92,20 @@ Item {
         onSeek: {
             if (player.seekable) {
                 player.seek(player.duration * mouseX / bar_width);
+                logger.log("" + player.duration + "")
+            }
+        }
+        onShowLyric: {
+            var lyric_str = douban.get_lyric()
+            var lyrics = lyric_str.split('\r\n')
+            main.content = lyrics
+        }
+        onDownload: {
+            var download_status = douban.download_content()
+            if (download_status) {
+                logger.log("download success")
+            } else {
+                logger.err("download failed")
             }
         }
     }
@@ -109,8 +123,8 @@ Item {
             if (login_status) {
                 douban.get_playlist('n')
                 douban.download_content()
-                main.picture = "../picture/" + douban.get_pic_name()
-                player.source = "../music/" + douban.get_music_name()
+                main.picture = douban.get_pic_name()
+                player.source = douban.get_music_name()
                 main.reset()
                 main.title = douban.get_title()
                 main.artist = douban.get_artist()
@@ -128,17 +142,17 @@ Item {
         var is_login = douban.detect_login()
         if (is_login) {
             douban.get_playlist('n')
-            var download_status = douban.download_content()
-            logger.log_bool(download_status)
-            if (download_status) {
+            //var download_status = douban.download_content()
+            //logger.log_bool(download_status)
+            //if (download_status) {
                 logger.log("--------------------")
-                main.picture = "../picture/" + douban.get_pic_name()
+                main.picture = douban.get_pic_name()
                 main.reset()
-                player.source = "../music/" + douban.get_music_name()
+                player.source = douban.get_music_name()
                 main.title = douban.get_title()
                 main.artist = douban.get_artist()
                 player.play()
-            }
+            //}
 
             main.visible = true
             login.visible = false

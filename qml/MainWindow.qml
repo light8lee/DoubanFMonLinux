@@ -12,6 +12,9 @@ Item {
     property alias mouseX: bar.mouseX
     property alias picture: intrfce.source
     property alias completion_degree: bar.completion_degree
+    property alias content: lyric_panel.content
+    signal showLyric
+    signal download
     signal love
     signal unlove
     signal throwed
@@ -111,10 +114,21 @@ Item {
                 onShow: {
                     if (showing) return
                     console.log("show lyric")
-                    var lyric_str = douban.get_lyric()
-                    var lyrics = lyric_str.split('\r\n')
-                    lyric_panel.content = lyrics
                     showing = true
+                    root.showLyric()
+                }
+            }
+
+            DownloadButton {
+                id: download_btn
+                y: lyric_btn.y
+                x: lyric_btn.x + 40
+                property bool downloaded: false
+                onDownload: {
+                    if (downloaded) return
+                    console.log("download song")
+                    downloaded = true
+                    root.download()
                 }
             }
         }
@@ -127,7 +141,7 @@ Item {
                 id: intrfce
                 radius: 120
                 anchors.fill: parent
-                source: "assets/lf.jpg"
+                source: "https://img3.doubanio.com/lpic/s2788303.jpg"
                 onClicked: {
                     console.log("circle clicked")
                 }
@@ -150,6 +164,7 @@ Item {
         intrfce.refresh()
         loveit.reset()
         lyric_btn.showing = false
+        download_btn.downloaded = false
         lyric_panel.content = []
     }
 

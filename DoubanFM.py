@@ -126,7 +126,7 @@ class DoubanFM(QObject):
         song = self.song
         pic_url = song['picture']
         r = self.rqst.get(pic_url, headers=headers, stream=True, timeout=10)
-        pic_name = "picture/" + pic_url.split('/')[-1]
+        pic_name = "picture/" + song['title'] + "-" + song['artist'] + "." + pic_url.split('.')[-1]
         if r.status_code != 200:
             Logger.err(pic_url)
             Logger.err('error get picture')
@@ -139,7 +139,7 @@ class DoubanFM(QObject):
 
         music_url = song['url']
         r = self.rqst.get(music_url, headers=headers, stream=True, timeout=20)
-        music_name = "music/" + music_url.split('/')[-1]
+        music_name = "music/" + song['title'] + "-" + song['artist'] + "." + song['file_ext']
         if r.status_code != 200:
             Logger.err(music_url)
             Logger.err('error get music')
@@ -153,13 +153,13 @@ class DoubanFM(QObject):
 
     @pyqtSlot(result=str)
     def get_pic_name(self):
-        res = self.song['picture'].split('/')[-1]
+        res = self.song['picture']
         Logger.log("pic_name %s" % res)
         return res
 
     @pyqtSlot(result=str)
     def get_music_name(self):
-        res = self.song['url'].split('/')[-1]
+        res = self.song['url']
         Logger.log("music_name %s" % res)
         return res
 
@@ -170,6 +170,10 @@ class DoubanFM(QObject):
     @pyqtSlot(result=str)
     def get_title(self):
         return self.song['title']
+
+    @pyqtSlot(result=str)
+    def get_file_ext(self):
+        return self.song['file_ext']
 
     @pyqtSlot(result=str)
     def get_lyric(self):
