@@ -67,6 +67,7 @@ Item {
     MouseArea {
         anchors.fill: cvs
         hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
         onClicked: {
             cvs.stop = !cvs.stop
             root.clicked()

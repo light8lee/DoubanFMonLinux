@@ -33,6 +33,7 @@ Item {
         MouseArea {
             id: bar_area
             anchors.fill: parent
+            cursorShape: Qt.PointingHandCursor
             onClicked: {
                 root.clicked()
             }

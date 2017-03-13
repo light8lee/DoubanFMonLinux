@@ -197,9 +197,23 @@ class DoubanFM(QObject):
             Logge.err(r.status_code)
         res = r.json()
         lyric = res['lyric']
-        lr = re.compile("\[\d{2}:\d{2}\.\d{2}\]")
-        content = lr.split(lyric)[1:]
+        lr = re.compile("\[\d{2}:[\-0-9]{2}\.\d{2}\]")
+        content = lr.split(lyric)
         time = lr.findall(lyric)
         lyric_str = "".join(content)
+        times = [int(t[1:3])*60+int(t[4:6]) for t in time]
+        self.times = times
+        print(lyric.encode('utf-8'))
+        print(times)
         return lyric_str
 
+    @pyqtSlot(int, result=int)
+    def get_index(self, passed_time):
+        passed_time = int(passed_time/1000)
+        for i in range(len(self.times)):
+            if self.times[i] < passed_time:
+                continue
+            if self.times[i] == passed_time:
+                return i
+            return i-1
+        return -1

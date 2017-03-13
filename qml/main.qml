@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtMultimedia 5.6
+import QtQml 2.2
 
 Item {
     id: root
@@ -7,9 +8,16 @@ Item {
     height: 620
 
     property bool remain: false
+    property int passed_time: 0
+    property var times: []
+
     MediaPlayer {
         id: player
         source: ""
+        onPlaying: {
+            timer.start()
+        }
+
         onStopped: {
             var res
             if (root.remain) {
@@ -21,12 +29,12 @@ Item {
             if (!res) return
             //var download_status = douban.download_content()
             //if (download_status) {
-                main.picture = douban.get_pic_name()
-                player.source = douban.get_music_name()
-                main.reset()
-                main.title = douban.get_title()
-                main.artist = douban.get_artist()
-                player.play()
+            main.picture = douban.get_pic_name()
+            player.source = douban.get_music_name()
+            reset()
+            main.title = douban.get_title()
+            main.artist = douban.get_artist()
+            player.play()
             //}
         }
     }
@@ -41,12 +49,23 @@ Item {
 
     }
 
+    Timer {
+        id: timer
+        interval: 500
+        running: false
+        repeat: true
+        onTriggered: {
+            if (main.showing)
+                main.currentIndex = douban.get_index(main.completion_degree * player.duration)
+        }
+    }
 
 
     MainWindow {
         id: main
         visible: true
         completion_degree: player.duration > 0? player.position / player.duration: 0
+        property bool showing: false
         picture: ""
         onLove: {
             var res = douban.get_playlist('r')
@@ -62,12 +81,12 @@ Item {
             if (!res) return
             //var download_status = douban.download_content()
             //if (download_status) {
-                main.picture = douban.get_pic_name()
-                player.source = douban.get_music_name()
-                main.reset()
-                main.title = douban.get_title()
-                main.artist = douban.get_artist()
-                player.play()
+            main.picture = douban.get_pic_name()
+            player.source = douban.get_music_name()
+            reset()
+            main.title = douban.get_title()
+            main.artist = douban.get_artist()
+            player.play()
             //}
         }
         onThrowed: {
@@ -75,30 +94,41 @@ Item {
             if (!res) return
             //var download_status = douban.download_content()
             //if (download_status) {
-                main.picture = douban.get_pic_name()
-                player.source = douban.get_music_name()
-                main.reset()
-                main.title = douban.get_title()
-                main.artist = douban.get_artist()
-                player.play()
+            main.picture = douban.get_pic_name()
+            player.source = douban.get_music_name()
+            reset()
+            main.title = douban.get_title()
+            main.artist = douban.get_artist()
+            player.play()
             //}
         }
         onStart: {
             player.play()
+            if (main.showing)
+                timer.start()
         }
         onPause: {
             player.pause()
+            if (main.showing)
+                timer.stop()
         }
         onSeek: {
             if (player.seekable) {
-                player.seek(player.duration * mouseX / bar_width);
+                player.seek(player.duration * mouseX / bar_width)
+                if (showing) {
+                    main.currentIndex = douban.get_index(main.completion_degree * player.duration)
+                }
                 logger.log("" + player.duration + "")
             }
         }
         onShowLyric: {
             var lyric_str = douban.get_lyric()
             var lyrics = lyric_str.split('\r\n')
+            main.showing = true
+            var time_str =
             main.content = lyrics
+            logger.log(""+player.position)
+            timer.start()
         }
         onDownload: {
             var download_status = douban.download_content()
@@ -125,7 +155,7 @@ Item {
                 douban.download_content()
                 main.picture = douban.get_pic_name()
                 player.source = douban.get_music_name()
-                main.reset()
+                reset()
                 main.title = douban.get_title()
                 main.artist = douban.get_artist()
 
@@ -145,13 +175,13 @@ Item {
             //var download_status = douban.download_content()
             //logger.log_bool(download_status)
             //if (download_status) {
-                logger.log("--------------------")
-                main.picture = douban.get_pic_name()
-                main.reset()
-                player.source = douban.get_music_name()
-                main.title = douban.get_title()
-                main.artist = douban.get_artist()
-                player.play()
+            logger.log("--------------------")
+            main.picture = douban.get_pic_name()
+            player.source = douban.get_music_name()
+            reset()
+            main.title = douban.get_title()
+            main.artist = douban.get_artist()
+            player.play()
             //}
 
             main.visible = true
@@ -160,5 +190,11 @@ Item {
             main.visible = false
             login.visible = true
         }
+    }
+    function reset() {
+        main.reset()
+        timer.stop()
+        main.currentIndex = -1
+        main.showing = false
     }
 }

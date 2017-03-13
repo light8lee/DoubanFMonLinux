@@ -12,20 +12,21 @@ Item {
         text: qsTr("")
     }
     MouseArea {
-       anchors.fill: parent
-       hoverEnabled: true
-       onEntered: {
-           //console.log("Entered!")
-           //txt.font.bold = true
-           txt.font.underline = true
-       }
-       onExited: {
-           //console.log("Exited!")
-           //txt.font.bold = false
-           txt.font.underline = false
-       }
-       onClicked: {
-           root.clicked()
-       }
+        anchors.fill: parent
+        hoverEnabled: true
+        cursorShape: Qt.PointingHandCursor
+        onEntered: {
+            //console.log("Entered!")
+            //txt.font.bold = true
+            txt.font.underline = true
+        }
+        onExited: {
+            //console.log("Exited!")
+            //txt.font.bold = false
+            txt.font.underline = false
+        }
+        onClicked: {
+            root.clicked()
+        }
     }
 }

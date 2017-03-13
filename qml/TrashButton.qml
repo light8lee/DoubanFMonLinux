@@ -53,6 +53,7 @@ Item {
     }
     MouseArea {
         anchors.fill: cvs
+        cursorShape: Qt.PointingHandCursor
         onClicked: {
             root.throwed()
         }

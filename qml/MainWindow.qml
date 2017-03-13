@@ -13,6 +13,7 @@ Item {
     property alias picture: intrfce.source
     property alias completion_degree: bar.completion_degree
     property alias content: lyric_panel.content
+    property alias currentIndex: lyric_panel.currentIndex
     signal showLyric
     signal download
     signal love
