@@ -24,6 +24,13 @@ Item {
     signal pause
     signal seek
 
+    DoubanLogo {
+        x: 40
+        y: 30
+        width: 200
+        height: 100
+    }
+
     RowLayout {
         id: row
         anchors.fill: parent

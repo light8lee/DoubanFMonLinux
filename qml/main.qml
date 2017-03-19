@@ -2,15 +2,13 @@ import QtQuick 2.0
 import QtMultimedia 5.6
 import QtQml 2.2
 
-Item {
+DoubanWindow {
     id: root
     width: 1020
     height: 620
-
     property bool remain: false
     property int passed_time: 0
     property var times: []
-
     MediaPlayer {
         id: player
         source: ""
@@ -27,15 +25,12 @@ Item {
                 res = douban.get_playlist('p')
             }
             if (!res) return
-            //var download_status = douban.download_content()
-            //if (download_status) {
             main.picture = douban.get_pic_name()
             player.source = douban.get_music_name()
             reset()
             main.title = douban.get_title()
             main.artist = douban.get_artist()
             player.play()
-            //}
         }
     }
 
@@ -79,28 +74,22 @@ Item {
         onNext: {
             var res = douban.get_playlist('s')
             if (!res) return
-            //var download_status = douban.download_content()
-            //if (download_status) {
             main.picture = douban.get_pic_name()
             player.source = douban.get_music_name()
             reset()
             main.title = douban.get_title()
             main.artist = douban.get_artist()
             player.play()
-            //}
         }
         onThrowed: {
             var res = douban.get_playlist('b')
             if (!res) return
-            //var download_status = douban.download_content()
-            //if (download_status) {
             main.picture = douban.get_pic_name()
             player.source = douban.get_music_name()
             reset()
             main.title = douban.get_title()
             main.artist = douban.get_artist()
             player.play()
-            //}
         }
         onStart: {
             player.play()
@@ -172,9 +161,6 @@ Item {
         var is_login = douban.detect_login()
         if (is_login) {
             douban.get_playlist('n')
-            //var download_status = douban.download_content()
-            //logger.log_bool(download_status)
-            //if (download_status) {
             logger.log("--------------------")
             main.picture = douban.get_pic_name()
             player.source = douban.get_music_name()
@@ -182,7 +168,6 @@ Item {
             main.title = douban.get_title()
             main.artist = douban.get_artist()
             player.play()
-            //}
 
             main.visible = true
             login.visible = false
