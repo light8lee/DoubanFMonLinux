@@ -63,6 +63,9 @@ Item {
             verticalAlignment: TextInput.AlignVCenter
             activeFocusOnPress: true
             placeholderText: "手机号 / 邮箱 / 用户名"
+            style: TextFieldStyle {
+                textColor: "black"
+            }
             onCursorPositionChanged: {
                 uid_tip.visible = false
                 tip.visible = false
@@ -98,6 +101,9 @@ Item {
             activeFocusOnPress: true
             font.pixelSize: 14
             placeholderText: "密码"
+            style: TextFieldStyle {
+                textColor: "black"
+            }
             onCursorPositionChanged: {
                 passwd_tip.visible = false
                 tip.visible = false
@@ -127,6 +133,10 @@ Item {
                     height: btn.height
                     color: "#59B36A"
                     radius: 4
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                    }
                 }
 
                 label: Item {

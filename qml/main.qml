@@ -128,32 +128,43 @@ DoubanWindow {
             }
         }
     }
-    Login {
-        id: login
-        width: 480
-        height: 340
+    Rectangle {
+        id: login_panel
         visible: false
-        anchors.centerIn: parent
-        onClicked: {
-            var login_status = douban.login(login.uname, login.password)
-            logger.log(uname)
-            logger.log(password)
-            logger.log_bool(login_status)
-            if (login_status) {
-                douban.get_playlist('n')
-                douban.download_content()
-                main.picture = douban.get_pic_name()
-                player.source = douban.get_music_name()
-                reset()
-                main.title = douban.get_title()
-                main.artist = douban.get_artist()
+        anchors.bottom: root.bottom
+        anchors.left: root.left
+        anchors.right: root.right
+        width: root.width
+        height: root.height - root.titlebar.height
+        z: 2
+        anchors.top: root.titlebar.bottom
+        Login {
+            id: login
+            width: 480
+            height: 340
+            //visible: false
+            anchors.centerIn: parent
+            onClicked: {
+                var login_status = douban.login(login.uname, login.password)
+                logger.log(uname)
+                logger.log(password)
+                logger.log_bool(login_status)
+                if (login_status) {
+                    douban.get_playlist('n')
+                    douban.download_content()
+                    main.picture = douban.get_pic_name()
+                    player.source = douban.get_music_name()
+                    reset()
+                    main.title = douban.get_title()
+                    main.artist = douban.get_artist()
 
-                main.visible = true
-                login.visible = false
-            } else {
-                login.uname = ""
-                login.password = ""
-                show_tip()
+                    main.visible = true
+                    login_panel.visible = false
+                } else {
+                    login.uname = ""
+                    login.password = ""
+                    show_tip()
+                }
             }
         }
     }
@@ -170,10 +181,10 @@ DoubanWindow {
             player.play()
 
             main.visible = true
-            login.visible = false
+            login_panel.visible = false
         } else {
             main.visible = false
-            login.visible = true
+            login_panel.visible = true
         }
     }
     function reset() {
