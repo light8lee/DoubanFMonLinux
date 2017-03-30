@@ -17,6 +17,7 @@ ApplicationWindow {
     property int mainWindowY //存储窗口y坐标
     property int xMouse //存储鼠标x坐标
     property int yMouse //存储鼠标y坐标
+    property alias titlebar: mainTitle
     style: ApplicationWindowStyle {
         background: Rectangle {
             color: "white"
