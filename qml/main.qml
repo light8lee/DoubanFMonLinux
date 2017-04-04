@@ -92,6 +92,7 @@ DoubanWindow {
             player.play()
         }
         onStart: {
+            player.volume = volume_degree
             player.play()
             if (main.showing)
                 timer.start()
@@ -126,6 +127,9 @@ DoubanWindow {
             } else {
                 logger.err("download failed")
             }
+        }
+        onSetVolume: {
+            player.volume = volume_degree
         }
     }
     Rectangle {

@@ -3,8 +3,8 @@ import 'js/tiger.js' as Tiger
 
 Item {
     id: root
-    width: 20
-    height: 20
+    width: 18
+    height: 18
     signal show
     Canvas {
         id: cvs
@@ -29,20 +29,20 @@ Item {
 
             ctx.lineWidth = 1;
 
-            for (var i = 0; i < Tiger.Lyric.length; i++) {
-                if (Tiger.Lyric[i].width != undefined)
-                    ctx.lineWidth = Tiger.Lyric[i].width;
+            for (var i = 0; i < Tiger.Volume.length; i++) {
+                if (Tiger.Volume[i].width != undefined)
+                    ctx.lineWidth = Tiger.Volume[i].width;
 
-                if (Tiger.Lyric[i].path != undefined)
-                    ctx.path = Tiger.Lyric[i].path;
+                if (Tiger.Volume[i].path != undefined)
+                    ctx.path = Tiger.Volume[i].path;
 
-                if (Tiger.Lyric[i].fill != undefined) {
-                    ctx.fillStyle = Tiger.Lyric[i].fill;
+                if (Tiger.Volume[i].fill != undefined) {
+                    ctx.fillStyle = Tiger.Volume[i].fill;
                     ctx.fill();
                 }
 
-                if (Tiger.Lyric[i].stroke != undefined) {
-                    ctx.strokeStyle = Tiger.Lyric[i].stroke;
+                if (Tiger.Volume[i].stroke != undefined) {
+                    ctx.strokeStyle = Tiger.Volume[i].stroke;
                     ctx.stroke();
                 }
 

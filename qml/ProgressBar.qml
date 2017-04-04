@@ -8,6 +8,8 @@ Item {
     signal clicked
     property alias mouseX: bar_area.mouseX
     property real completion_degree: 0
+    property alias color: progress_bar.color
+    property alias foreground_color: progress.color
 
     Rectangle {
         id: progress_bar

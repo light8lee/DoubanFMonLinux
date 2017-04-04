@@ -14,6 +14,7 @@ Item {
     property alias completion_degree: bar.completion_degree
     property alias content: lyric_panel.content
     property alias currentIndex: lyric_panel.currentIndex
+    property alias volume_degree: volume_panel.volume_degree
     signal showLyric
     signal download
     signal love
@@ -23,6 +24,7 @@ Item {
     signal start
     signal pause
     signal seek
+    signal setVolume
 
     DoubanLogo {
         x: 40
@@ -116,7 +118,7 @@ Item {
 
             LyricButton {
                 id: lyric_btn
-                y: bar.y - 28
+                y: bar.y - 18
                 x: bar.width - 80
                 property bool showing: false
                 onShow: {
@@ -137,6 +139,15 @@ Item {
                     console.log("download song")
                     downloaded = true
                     root.download()
+                }
+            }
+
+            VolumePanel {
+                id: volume_panel
+                y: lyric_btn.y + 4
+                x: bar.x + 60
+                onClicked: {
+                    root.setVolume()
                 }
             }
         }
